@@ -15,7 +15,19 @@ io.on('connection', (socket) => {
   console.log('New user connected');
   socket.on('disconnect', () => {
     console.log('User has been disconnected');
-  })
+  });
+
+  socket.emit('newEmail', {
+    from: 'mike@example.com',
+    text: "what's going on",
+    createAt: 123
+  });
+
+  socket.on('createEmail', (newEmail) => {
+    console.log('Creating a new email', newEmail);
+    newEmail.text += 'changed by server';
+    socket.emit('printMessage', newEmail);
+  });
 }); //listens for a new connection and then perfoms a function
 
 server.listen(port, () => {
